@@ -115,14 +115,14 @@ module Fastlane
           unless rows.empty?
             rows << [rows.size + 1, "cancel", "No selection!"]
 
-          table = Terminal::Table.new(
-            title: "Available lanes to run",
-            headings: ['Number', 'Lane Name', 'Description'],
-            rows: rows
-          )
-          puts table
+            table = Terminal::Table.new(
+              title: "Available lanes to run",
+              headings: ['Number', 'Lane Name', 'Description'],
+              rows: rows
+            )
+            puts table
 
-          UI.message "Which number would you like run?"
+            UI.message "Which number would you like run?"
           end
 
           i = $stdin.gets.strip.to_i - 1
