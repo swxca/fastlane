@@ -125,10 +125,10 @@ module Fastlane
           )
           puts table
 
-          UI.message "Which number would you like run?"
+          i = UI.input "Which number would you like run?"
         end
 
-        i = $stdin.gets.strip.to_i - 1
+        i = i.to_i - 1
         if i >= 0 && available[i]
           selection = available[i].last.pretty_name
           UI.important "Running lane `#{selection}`. Next time you can do this by directly typing `fastlane #{selection}` 🚀."
