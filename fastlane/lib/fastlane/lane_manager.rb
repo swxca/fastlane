@@ -104,50 +104,49 @@ module Fastlane
     # @param platform: is probably nil, but user might have called `fastlane android`, and only wants to list those actions
     def self.choose_lane(ff, platform)
       available = ff.runner.lanes[platform].to_a
-      if !available.empty?
-        loop do
-          UI.message "Welcome to fastlane! Here's what your app is setup to do:"
-          rows = []
-          available.each_with_index do |lane, index|
-            rows << [index + 1, lane.last.pretty_name, lane.last.description.first]
-          end
-
-          unless rows.empty?
-            rows << [rows.size + 1, "cancel", "No selection!"]
-
-            table = Terminal::Table.new(
-              title: "Available lanes to run",
-              headings: ['Number', 'Lane Name', 'Description'],
-              rows: rows
-            )
-            puts table
-
-            UI.message "Which number would you like run?"
-          end
-
-          i = $stdin.gets.strip.to_i - 1
-          if i >= 0 && available[i]
-            selection = available[i].last.pretty_name
-            UI.important "Running lane `#{selection}`. Next time you can do this by directly typing `fastlane #{selection}` 🚀."
-            platform = selection.split(' ')[0]
-            lane_name = selection.split(' ')[1]
-
-            unless lane_name # no specific platform, just a root lane
-              lane_name = platform
-              platform = nil
-            end
-
-            return platform, lane_name # yeah
-          else
-            UI.message "Run `fastlane` the next time you need to build, test or release your app 🚀"
-            exit
-          end
-
-          UI.error "Invalid input. Please enter the number of the lane you want to use"
-        end
-      else
+      if available.empty?
         UI.error "It looks like you don't have any lanes to run just yet. Check out how to get started here: https://github.com/fastlane/fastlane 🚀"
         exit
+      end
+      loop do
+        UI.message "Welcome to fastlane! Here's what your app is setup to do:"
+        rows = []
+        available.each_with_index do |lane, index|
+          rows << [index + 1, lane.last.pretty_name, lane.last.description.first]
+        end
+
+        unless rows.empty?
+          rows << [rows.size + 1, "cancel", "No selection!"]
+
+          table = Terminal::Table.new(
+            title: "Available lanes to run",
+            headings: ['Number', 'Lane Name', 'Description'],
+            rows: rows
+          )
+          puts table
+
+          UI.message "Which number would you like run?"
+        end
+
+        i = $stdin.gets.strip.to_i - 1
+        if i >= 0 && available[i]
+          selection = available[i].last.pretty_name
+          UI.important "Running lane `#{selection}`. Next time you can do this by directly typing `fastlane #{selection}` 🚀."
+          platform = selection.split(' ')[0]
+          lane_name = selection.split(' ')[1]
+
+          unless lane_name # no specific platform, just a root lane
+            lane_name = platform
+            platform = nil
+          end
+
+          return platform, lane_name # yeah
+        else
+          UI.message "Run `fastlane` the next time you need to build, test or release your app 🚀"
+          exit
+        end
+
+        UI.error "Invalid input. Please enter the number of the lane you want to use"
       end
     end
 
