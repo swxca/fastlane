@@ -34,7 +34,7 @@ match
 [![Gem](https://img.shields.io/gem/v/match.svg?style=flat)](http://rubygems.org/gems/match)
 [![Build Status](https://img.shields.io/circleci/project/fastlane/fastlane/master.svg?style=flat)](https://circleci.com/gh/fastlane/fastlane)
 
-###### Easily sync your certificates and profiles across your team using git
+###### 使用Git简便的在团队成员直接同步你的证书和配置
 
 A new approach to iOS code signing: Share one code signing identity across your development team to simplify your codesigning setup and prevent code signing issues.
 
@@ -76,7 +76,7 @@ Before starting to use `match`, make sure to read the [codesigning.guide](https:
 
               |  match
 --------------------------|------------------------------------------------------------
-:arrows_counterclockwise:  | Automatically sync your iOS keys and profiles across all your team members using git
+:arrows_counterclockwise:  | 使用Git自动在团队所有成员之间同步证书和配置文件
 :package:  | Handle all the heavy lifting of creating and storing your certificates and profiles
 :computer:  | Setup codesigning on a new machine in under a minute
 :dart:  | Designed to work with apps with multiple targets and bundle identifiers
@@ -89,7 +89,7 @@ Before starting to use `match`, make sure to read the [codesigning.guide](https:
 
 For more information about the concept, visit [codesigning.guide](https://codesigning.guide).
 
-## Installation
+## 安装
 
 ```
 sudo gem install match
@@ -99,15 +99,15 @@ Make sure you have the latest version of the Xcode command line tools installed:
 
     xcode-select --install
 
-## Usage
+## 使用
 
-### Setup
+### 启动
 
-1. Create a **new, private Git repo** (e.g. on [GitHub](https://github.com/new) or [BitBucket](https://bitbucket.org/repo/create)) and name it something like `certificates`. **Important:** Make sure the repository is set to *private*.
+1. 创建一个**新的、private的Git repo** (e.g. on [GitHub](https://github.com/new) or [BitBucket](https://bitbucket.org/repo/create)) 并命名为类似 `certificates`的名字。 **Important:** 确保这个仓库是*私有*的.
 
 2. Optional: Create a **new, shared Apple Developer Portal account**, something like `office@company.com` that will be shared across your team from now on (for more information visit [codesigning.guide](https://codesigning.guide))
 
-3. Run the following in your project folder to start using `match`:
+3. 运行一下命令来开始使用 `match`:
 
 ```
 match init
@@ -115,11 +115,11 @@ match init
 
 <img src="assets/match_init.gif" width="550" />
 
-You'll be asked to enter the URL to your Git repo. This can be either a `https://` or a `git` URL. `match init` won't read or modify your certificates or profiles.
+程序会让你输入git仓库的地址. 可以是`https://` 或者`git` URL. `match init` 不会读取或者更改这个仓库里的内容.
 
-This will create a `Matchfile` in your current directory (or in your `./fastlane/` folder).
+然后一个`Matchfile`将会在当前目录里被创建 (或者是在`./fastlane/`文件夹).
 
-Example content (for more advanced setups check out the [fastlane section](#fastlane)):
+该文件的内容示例： (要查看更高级的设置，请查看[fastlane section](#fastlane)):
 
 ```ruby
 git_url "https://github.com/fastlane/fastlane/tree/master/certificates"
@@ -128,15 +128,15 @@ app_identifier "tools.fastlane.app"
 username "user@fastlane.tools"
 ```
 
-#### Important: Use one git repo per team
+#### Important: 一个团队使用一个git repo
 
-`match` was designed to have one git repository per Apple account. If you work in multiple teams, please create one repo for each of them. More information on [codesigning.guide](https://codesigning.guide)
+`match` 设计的是每个Apple ID一个git repo. 如果你为多个团队工作，请为每个团队创建各自的repo。 More information on [codesigning.guide](https://codesigning.guide)
 
-### Run
+### 运行
 
-> Before running `match` for the first time, you should consider clearing your existing profiles and certificates using the [match nuke command](#nuke).
+> 第一次运行 `match` 命令之前，请考虑是否需要使用[match nuke command](#nuke)命令清除已经有的证书和pp文件。
 
-After running `match init` you can run the following to generate new certificates and profiles:
+在运行了 `match init` 你就可以运行如下命令生成新的证书和pp文件profiles:
 
 ```
 match appstore
@@ -147,9 +147,9 @@ match development
 
 <img src="assets/match_appstore_small.gif" width="550" />
 
-This will create a new certificate and provisioning profile (if required) and store them in your Git repo. If you previously ran `match` it will automatically install the existing profiles from the Git repo.
+这将会创建新的证书和pp文件（如有需要）并存储到git repo里。如果你之前运行过`match`命令，它会自动下载已有的。
 
-The provisioning profiles are installed in `~/Library/MobileDevice/Provisioning Profiles` while the certificates and private keys are installed in your Keychain.
+pp文件安装在`~/Library/MobileDevice/Provisioning Profiles`下，而证书和私钥存储在Keychain里。
 
 To get a more detailed output of what `match` is doing use
 
@@ -163,9 +163,9 @@ For a list of all available options run
 match --help
 ```
 
-#### Handle multiple targets
+#### 处理多个target
 
-If you have several targets with different bundle identifiers, call `match` for each of them:
+如果你有多个target，各有不同的Bundle Identifier， 可以单独为某一个target运行`match`:
 
 ```
 match appstore -a tools.fastlane.app
@@ -186,45 +186,45 @@ Then all your team has to do is `fastlane match` and keys, certs and profiles fo
 
 #### Passphrase
 
-When running `match` for the first time on a new machine, it will ask you for the passphrase for the Git repository. This is an additional layer of security: each of the files will be encrypted using `openssl`. Make sure to remember the password, as you'll need it when you run match on a different machine.
+在一台新电脑上第一次运行`match`时，它会让你输入git repo的密码，这是一层安全措施：所有文件都是使用`openssl`加密过的，因此在新电脑上安装的时候你需要这个密码来解密。
 
-To set the passphrase using an environment variable, use `MATCH_PASSWORD`.
+要用环境变量设置密码的话，用`MATCH_PASSWORD`.
 
-#### New machine
+#### 新电脑
 
-To set up the certificates and provisioning profiles on a new machine, you just run the same command using:
+要在新电脑上设置证书和pp文件，你只需要运行：
 
 ```
 match development
 ```
 
-You can also run `match` in a `readonly` mode to be sure it won't create any new certificates or profiles.
+可以在`readonly` 模式下运行`match`以防止产生新的证书。
 
 ```
 match development --readonly
 ```
 
-#### Access Control
+#### 访问限制
 
-A benefit of using `match` is that it enables you to give the developers of your team access to the code signing certificates without having to give everyone access to the Developer Portal:
+使用`match`的一个好处是可以不用让每个人都去访问developer portal就能让他们拿到CS证书:
 
-1. Run `match` to store the certificates in a Git repo
-2. Grant access to the Git repo to your developers and give them the passphrase
-3. The developers can now run `match` which will install the latest code signing profiles so they can build and sign the application without having to have access to the developer portal
-4. Every time you run `match` to update the profiles (e.g. add a new device), all your developers will automatically get the latest profiles when running `match`
+1. 运行`match`以把证书存储到Git repo
+2. 给团队成员密码，让他们能访问这个repo
+3. 团队成员可以运行`match`来自动下载和安装证书签名文件，这样他们就不用访问developer portal了。
+4. 每次你运行`match`来更新pp文件时，(e.g. 添加新设备), 所有的成员在运行`match`之后都会得到更新后的文件
 
-If you decide to run `match` without access to the developer portal, make sure to use the `--readonly` option so that the commands don't ask you for the password to the developer portal.
+如果你不需要`match`访问developer portal，请加上`--readonly`，这样它就不会向你要developer portal的密码了.
 
-The advantage of this approach is that no one in your team will revoke a certificate by mistake. Additionally it is recommended to install the [FixCode Xcode Plugin](https://github.com/neonichu/FixCode) to disable the `Fix Issue` button.
+这么做的好处是没有人会因为误操作而revoke证书了. 此外建议安装[FixCode Xcode Plugin](https://github.com/neonichu/FixCode)来禁用`Fix Issue`按钮.
 
 #### Git Repo
 
-After running `match` for the first time, your Git repo will contain 2 directories:
+在第一次运行`match`后，你的git repo将会包含两个文件夹:
 
-- The `certs` folder contains all certificates with their private keys
-- The `profiles` folder contains all provisioning profiles
+- `certs`包含了所有的证书和私钥
+- `profiles`包含了所有的pp文件
 
-Additionally, `match` creates a nice repo `README.md` for you, making it easy to onboard new team members:
+此外`match`还贴心的为你创建了`README.md`让新成员更容易上手:
 
 <p align="center">
   <img src="assets/github_repo.png" width="700" />
@@ -232,7 +232,7 @@ Additionally, `match` creates a nice repo `README.md` for you, making it easy to
 
 #### fastlane
 
-Add `match` to your `Fastfile` to automatically fetch the latest code signing certificates with [fastlane](https://fastlane.tools).
+使用[fastlane](https://fastlane.tools)，把`match`添加到你的`Fastfile`来自动获取最新的code signing certificates.
 
 ```ruby
 match(type: "appstore")
@@ -244,27 +244,27 @@ match(git_url: "https://github.com/fastlane/fastlane/tree/master/certificates",
       type: "adhoc",
       app_identifier: "tools.fastlane.app")
 
-# `match` should be called before building the app with `gym`
+# `match` 应该在你使用 `gym`build项目之前运行
 gym
 ...
 ```
 
-##### Multiple Targets
+##### 多个Targets
 
-If your app has multiple targets (e.g. Today Widget or WatchOS Extension)
+如果你的项目有多个target (e.g. Widget or WatchOS Extension)
 
 ```ruby
 match(app_identifier: "tools.fastlane.app", type: "appstore")
 match(app_identifier: "tools.fastlane.app.today_widget", type: "appstore")
 ```
 
-`match` can even use the same one Git repository for all bundle identifiers.
+`match` 可以为所有的bundle identifier使用同一个repo.
 
 ### Setup Xcode project
 
-To make sure Xcode is using the right provisioning profile for each target, don't use the `Automatic` feature for the profile selection.
+为了保证Xcode为每个target使用正确的pp文件, 不要使用 `Automatic` 功能 for the profile selection.
 
-Additionally it is recommended to disable the `Fix Issue` button using the [FixCode Xcode Plugin](https://github.com/neonichu/FixCode). The `Fix Issue` button can revoke your existing certificates, which will invalidate your provisioning profiles.
+此外建议使用[FixCode Xcode Plugin](https://github.com/neonichu/FixCode)禁用`Fix Issue`按钮. 这个`Fix Issue`可能会revoke已有的证书，从而导致pp文件失效。
 
 #### To build from the command line using [fastlane](https://fastlane.tools)
 
@@ -286,14 +286,15 @@ This is useful when installing your application on your device using the Develop
 
 You can statically select the right provisioning profile in your Xcode project (the name will be `match Development tools.fastlane.app`).
 
-### Continuous Integration
+### 连续集成
 
-#### Repo access
-There is one tricky part of setting up a CI system to work with `match`, which is enabling the CI to access the repo. Usually you'd just add your CI's public ssh key as a deploy key to your `match` repo, but since your CI will already likely be using its public ssh key to access the codebase repo, [you won't be able to do that](https://help.github.com/articles/error-key-already-in-use/).
+#### Repo访问
 
-Some repo hosts might allow you to use the same deploy key for different repos, but GitHub will not. If your host does, you don't need to worry about this, just add your CI's public ssh key as a deploy key for your `match` repo and scroll down to "_Encryption password_".
+在让一个连续集成CI系统使用`match`时，会出现一种很古怪的问题：要让CI能访问到git repo，通常的做法是吧CI的公共ssh key添加到`match`的repo里，但是由于你的CI要用这个key来访问你的代码所在的repo，[你不能这么做(把key添加到`match`的repo里)，否则会出现error:`key already in use`](https://help.github.com/articles/error-key-already-in-use/)
 
-There are a few ways around this:
+有的repo管理网站允许你把同一个deploy key添加给多个不同的repo，但是github不允许。如果你使用的管理网站允许，你就不用担心这个问题了，把CI的key添加到`match`的repo里，翻到[这儿](####Encryption password)开始看吧。
+
+处理方法:
 
 1. Create a new account on your repo host with read-only access to your `match` repo. Bitrise have a good description of this [here](http://devcenter.bitrise.io/docs/adding-projects-with-submodules).
 2. Some CIs allow you to upload your signing credientials manually, but obviously this means that you'll have to re-upload the profiles/keys/certs each time they change.
@@ -328,7 +329,7 @@ match change_password
 
 You'll be asked for the new password on all your machines on the next run.
 
-### Manual Decrypt
+### 手动解密
 
 If you want to manually decrypt a file you can.
 
@@ -365,11 +366,11 @@ Because of the potentially dangerous nature of In-House profiles we decided to n
 
 ##### To sum up
 
-- You have full control over the access list of your Git repo, no third party service involved
-- Even if your certificates are leaked, they can't be used to cause any harm without your iTunes Connect login credentials
-- `match` does not currently support In-House Enterprise profiles as they are harder to control
-- If you use GitHub or Bitbucket we encourage enabling 2 factor authentication for all accounts that have access to the certificates repo
-- The complete source code of `match` is fully open source on [GitHub](https://github.com/fastlane/fastlane/tree/master/match)
+- 你对你的repo有完全的控制权，没有第三方介入
+- 即使证书泄露，没有iTunes Connect密码的人也不能对你造成损害
+- `match`目前不支持Enterprise版的Apple开发者账户（就是那种做了app只能公司内部使用，不能发布到App Store，我们的fastspider2017@gmail.com就是这种）
+- 如果你使用GitHub或Bitbucket，我们建议开启所有有权限访问证书仓库的账号的两步验证
+- `match`完全开源，所有的代码都在[GitHub](https://github.com/fastlane/fastlane/tree/master/match)
 
 ## [`fastlane`](https://fastlane.tools) Toolchain
 
