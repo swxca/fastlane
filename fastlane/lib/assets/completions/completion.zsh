@@ -4,10 +4,13 @@ _fastlane_complete() {
 
   # look for Fastfile either in this directory or fastlane/ then grab the lane names
   if [[ -e "Fastfile" ]] then
-    completions=`cat Fastfile | grep "lane \:" | awk -F ':' '{print $2}' | awk -F ' ' '{print $1}'`
+    file="Fastfile"
   elif [[ -e "fastlane/Fastfile" ]] then
-    completions=`cat fastlane/Fastfile | grep "lane \:" | awk -F ':' '{print $2}' | awk -F ' ' '{print $1}'`
+    file="fastlane/Fastfile"
   fi
+
+  # parse 'beta' out of 'lane :beta do', etc
+  completions=`cat $file | grep "lane \:" | awk -F ':' '{print $2}' | awk -F ' ' '{print $1}'`
 
   reply=( "${(ps:\n:)completions}" )
 }
